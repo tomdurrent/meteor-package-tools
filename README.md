@@ -1,6 +1,6 @@
-# Ethereum tools
+# Sero tools
 
-A set of helper functions for ethereum dapps.
+A set of helper functions for Sero dapps.
 
 See here for a [demo of the template helpers](http://localhost:4000/#tools).
 
@@ -8,15 +8,16 @@ See here for a [demo of the template helpers](http://localhost:4000/#tools).
 
 You can either add it as a Meteor package using:
 
-    $ Meteor add ethereum:tools
+    $ Meteor add Sero:tools
 
-or add link to the `EthTools.js` in your HTML.
+or add link to the `serotools.js` in your HTML.
+
 
 ## Usage
 
 This package provides formating and converting functionality.
 
-When using the `EthTools.ticker` it will call the [cryptocompare.com public API](https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR) every 30s to retrive price information for ether.
+When using the `SeroTools.ticker` it will call the [cryptocompare.com public API](https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR) every 30s to retrive price information for ether.
 When used as a Meteor package, the following units are possible for some methods:
 
     - `btc`
@@ -29,19 +30,19 @@ When used as a Meteor package, the following units are possible for some methods
 
 **Note** As non-meteor package you can only use the ether units.
 
----
+***
 
-### EthTools.ticker
+### SeroTools.ticker
 
-    EthTools.ticker.start();
-    EthTools.ticker.findOne(unit)
+    SeroTools.ticker.start();
+    SeroTools.ticker.findOne(unit)
 
 **Note** This is only available when used as a Meteor package.
 
-To start polling for ticker prices run `EthTools.ticker.start()`
+To start polling for ticker prices run `SeroTools.ticker.start()`
 
 It gives you the latest price for ether based on the [kraken.com public API](https://api.kraken.com/0/public/Ticker?pair=XETHZEUR,XXBTZUSD).
-`EthTools.ticker` is a reactive collection, so when used in a reactive function it will re-run this function when the price is updated.
+`SeroTools.ticker` is a reactive collection, so when used in a reactive function it will re-run this function when the price is updated.
 
 The ticker will be updated every 30 seconds.
 
@@ -49,14 +50,13 @@ The ticker will be updated every 30 seconds.
 
 Its a normal Meteor collection
 
-* `start(options)` - starts the polling for the ticker, the options object can be an object with `{extraParams: 'mydata'}` to be added to the ticker polling call
-* `findOne(unit)` - returns an object with the price of the unit
-* `find().fetch()` - returns all available price ticker units
+- `start(options)` - starts the polling for the ticker, the options object can be an object with `{extraParams: 'mydata'}` to be added to the ticker polling call
+- `findOne(unit)` - returns an object with the price of the unit
+- `find().fetch()` - returns all available price ticker units
 
 **Returns**
 
-* `Object`
-
+- `Object`
 ```js
 {
     _id: 'btc',
@@ -65,25 +65,25 @@ Its a normal Meteor collection
 ```
 
 **Example**
-
 ```js
-var usd = EthTools.ticker.findOne("usd");
+var usd = SeroTools.ticker.findOne('usd')
 
-if (usd) console.log(usd.price); // "2.0000"
+if(usd)
+    console.log(usd.price) // "2.0000"
 ```
 
----
+***
 
-### EthTools.setLocale
+### SeroTools.setLocale
 
-    EthTools.setLocale(locale)
+    SeroTools.setLocale(locale)
 
 Set the locale to display numbers differently in other countries.
-This functions lets `EthTools.formatBalance()` and `EthTools.formatNumber()` reactivly re-run, to show the new format.
+This functions lets `SeroTools.formatBalance()` and `SeroTools.formatNumber()` reactivly re-run, to show the new format.
 
 **Parameters**
 
-* `locale` (`String`) - the locale to set
+- `locale` (`String`) - the locale to set
 
 **Returns**
 
@@ -92,27 +92,27 @@ This functions lets `EthTools.formatBalance()` and `EthTools.formatNumber()` rea
 **Example**
 
 ```js
-EthTools.setLocale("de");
-EthTools.formatNumber(2000, "0,0.00");
+SeroTools.setLocale('de');
+SeroTools.formatNumber(2000, '0,0.00');
 // 2 000,00
 ```
 
----
+***
 
-### EthTools.setUnit
+### SeroTools.setUnit
 
-    EthTools.setUnit(unit)
+    SeroTools.setUnit(unit)
 
 **Note** This is only available when used as a Meteor package.
 
-Reactivly sets a unit used as default unit, when no unit is passed to other EthTools methods.
+Reactivly sets a unit used as default unit, when no unit is passed to other SeroTools methods.
 And also persists it in localstorage so its the same when you reload you app.
 
 Default is unit `ether`.
 
 **Parameters**
 
-* `unit` (`String`) - the unit to set, see [Usage](#usage) for more
+- `unit` (`String`) - the unit to set, see [Usage](#usage) for more
 
 **Returns**
 
@@ -121,26 +121,27 @@ Default is unit `ether`.
 **Example**
 
 ```js
-EthTools.setUnit("btc");
+SeroTools.setUnit('btc');
 
-Tracker.autorun(function() {
-  var amount = EthTools.formatBalance("23000000000000000000", "0,0.0[00] unit");
-  // amount = "0.287 btc"
+Tracker.autorun(function(){
+    var amount = SeroTools.formatBalance('23000000000000000000', '0,0.0[00] unit');
+    // amount = "0.287 btc"
 });
 ```
 
----
+***
 
-### EthTools.getUnit
+### SeroTools.getUnit
 
-    EthTools.getUnit()
+    SeroTools.getUnit()
 
 **Note** This is only available when used as a Meteor package.
 
-Reactivly gets the current set default unit, used byt other EthTools methods when no unit was passed.
+Reactivly gets the current set default unit, used byt other SeroTools methods when no unit was passed.
 And also persists it in localstorage so its the same when you reload you app.
 
 Default is unit `ether`.
+
 
 **Parameters**
 
@@ -153,26 +154,27 @@ none
 **Example**
 
 ```js
-EthTools.setUnit("btc");
+SeroTools.setUnit('btc');
 
-Tracker.autorun(function() {
-  var unit = EthTools.getUnit();
-  // unit === 'btc'
+Tracker.autorun(function(){
+    var unit = SeroTools.getUnit();
+    // unit === 'btc'
 });
+
 ```
 
----
+***
 
-### EthTools.formatNumber
+### SeroTools.formatNumber
 
-    EthTools.formatNumber(number, format)
+    SeroTools.formatNumber(number, format)
 
 Formats any number using [numeral.js](http://numeraljs.com), e.g. `"0,0.00[0000]"`.
 
 **Parameters**
 
-* `number` (`String|Number`) - the number to format
-* `format` (`String`) - the format see [numeral.js](http://numeraljs.com) for examples, e.g. `"0,0.00[0000]"`
+- `number` (`String|Number`) - the number to format
+- `format` (`String`) - the format see [numeral.js](http://numeraljs.com) for examples, e.g. `"0,0.00[0000]"`
 
 **Returns**
 
@@ -181,11 +183,10 @@ Formats any number using [numeral.js](http://numeraljs.com), e.g. `"0,0.00[0000]
 **Example**
 
 ```js
-var finney = EthTools.formatNumber(2000, "0,0.00");
+var finney = SeroTools.formatNumber(2000, '0,0.00');
 // finney = '2,000.00'
 ```
-
----
+***
 
 #### Format number template helper
 
@@ -195,27 +196,27 @@ var finney = EthTools.formatNumber(2000, "0,0.00");
 {{dapp_formatNumber "1000000133" "0,0.00[0000]"}}
 ```
 
----
+***
 
-### EthTools.formatBalance
+### SeroTools.formatBalance
 
-    EthTools.formatBalance(wei, format, unit)
+    SeroTools.formatBalance(wei, format, unit)
 
-Formats a number of wei into any other ethereum unit and other currencies (see [Usage](#usage)).
+Formats a number of wei into any other Sero unit and other currencies (see [Usage](#usage)).
 
 Default is unit `ether`.
 
 The `format` property follows the [numeral.js](http://numeraljs.com) formatting, e.g. `"0,0.00[0000]"`.
 Additionally you can add `"unit"` or `"UNIT"` (for uppercase) to display the unit after or before the number the number.
 
-Additionally this function uses the reactive `EthTools.getUnit()` variable, when no `unit` was given.
-You can then reactivly change the unit using `EthTools.setUnit('finney')`
+Additionally this function uses the reactive `SeroTools.getUnit()` variable, when no `unit` was given.
+You can then reactivly change the unit using `SeroTools.setUnit('finney')`
 
 **Parameters**
 
-* `wei` (`String|Number`) - the amount of wei to convert and format
-* `format` (`String`) - the format see [numeral.js](http://numeraljs.com) for examples, e.g. `"0,0.00[0000]"`.
-* `unit` (`String`) - (optional) the unit to convert the given wei amount to, if not given it will use `EthTools.getUnit()`
+- `wei` (`String|Number`) - the amount of wei to convert and format
+- `format` (`String`) - the format see [numeral.js](http://numeraljs.com) for examples, e.g. `"0,0.00[0000]"`.
+- `unit` (`String`) - (optional) the unit to convert the given wei amount to, if not given it will use `SeroTools.getUnit()`
 
 **Returns**
 
@@ -224,15 +225,11 @@ You can then reactivly change the unit using `EthTools.setUnit('finney')`
 **Example**
 
 ```js
-var amount = EthTools.formatBalance(
-  112345676543212345,
-  "0,0.0[00] unit",
-  "finney"
-);
+var amount = SeroTools.formatBalance(112345676543212345, '0,0.0[00] unit', 'finney');
 // amount = "112.346 finney"
 ```
 
----
+***
 
 #### Format balances template helper
 
@@ -244,31 +241,31 @@ var amount = EthTools.formatBalance(
 {{dapp_formatBalance "1000000133" "0,0.00[0000]" "ether"}}
 ```
 
-If you leave the last value it will use `EthTools.getUnit()`, as reactive localstorage variable.
+If you leave the last value it will use `SeroTools.getUnit()`, as reactive localstorage variable.
 
 ```html
 {{dapp_formatBalance "1000000133" "0,0.00"}}
 ```
 
-Use then `EthTools.setUnit(finney')` to change the unit and displayed balances.
+Use then `SeroTools.setUnit(finney')` to change the unit and displayed balances.
 
----
+***
 
-### EthTools.toWei
+### SeroTools.toTa
 
-    EthTools.toWei(number, unit)
+    SeroTools.toTa(number, unit)
 
 Formats an amount of any supported unit (see [Usage](#usage)) into wei.
 
 Default is unit `ether`.
 
-Additionally this function uses the reactive `EthTools.getUnit()` variable, when no `unit` was given.
-You can then reactivly change the unit using `EthTools.setUnit('finney')`
+Additionally this function uses the reactive `SeroTools.getUnit()` variable, when no `unit` was given.
+You can then reactivly change the unit using `SeroTools.setUnit('finney')`
 
 **Parameters**
 
-* `number` (`String|Number`) - the number of a unit, see [Usage](#usage) for more
-* `unit` (`String`) - the unit of the given number
+- `number` (`String|Number`) - the number of a unit, see [Usage](#usage) for more
+- `unit` (`String`) - the unit of the given number
 
 **Returns**
 
@@ -277,6 +274,6 @@ You can then reactivly change the unit using `EthTools.setUnit('finney')`
 **Example**
 
 ```js
-var wei = EthTools.toWei(23, "btc");
+var wei = SeroTools.toTa(23, 'btc');
 // wei = "80000000000000000000"
 ```
